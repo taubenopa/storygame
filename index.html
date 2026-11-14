@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><title>HELLFIRE LAN</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="css/style.css"></head><body>
+<canvas id="cv"></canvas>
+<div id="m">
+ <div class="side">
+  <canvas id="logo" width="150" height="52" aria-label="HELLFIRE LAN"></canvas>
+  <p class="tag">Koop-Shooter für 1 bis 4 Spieler. Wellen, Bosse und ein Story-Modus für bis zu vier.</p>
+  <nav id="nav">
+   <button data-go="story"><b>Story-Modus</b><i>Mit bis zu 4 gegen Slimee Rebel</i></button>
+   <button data-go="host"><b>Koop &amp; Deathmatch</b><i>Wellen und Bosse, allein oder mit Freunden</i></button>
+   <button data-go="join"><b>Beitreten</b><i>Raum-Code vom Host eingeben</i></button>
+   <button data-go="guns"><b>Waffen</b><i id="ls">Loadout</i></button>
+   <button data-go="opts"><b>Ton &amp; Steuerung</b><i>Lautstärke, Tasten, Controller</i></button>
+  </nav>
+  <label class="name">Spielername<input id="nm" maxlength="10" value="Spieler"></label>
+ </div>
+ <div class="stage">
+  <section class="pane" id="p-story">
+   <h2>Story-Modus</h2>
+   <p class="lead">Slimee Rebel will den Insta-Account Lifestylecrazy zurück. Sechs Level, sechs Bosse, am Ende er selbst.</p>
+   <h3>Raum-Code für dein Squad</h3><div class="code" id="hc2">...</div>
+   <p id="pl2" class="hint"></p>
+   <h3>Dein Charakter</h3><div class="chars" id="cg"></div>
+   <div class="grid3"><label>Schwierigkeit<select id="sdf"><option value="0">Leicht</option><option value="1" selected>Normal</option><option value="2">Hart</option></select></label></div>
+   <div class="row"><button class="pri big" onclick="startStory(0)">Neues Spiel starten</button><button class="big" id="scont" onclick="startStory(1)">Fortsetzen</button></div>
+   <p class="hint">Start nur mit Pistole. Nach jedem Level gibt es ein Case Opening mit neuer Waffe. Bis zu 3 Mitspieler geben den Code unter „Beitreten“ ein, das geht auch nach dem Start. Alleine spielen geht auch. Mit mehr Spielern kommen mehr Gegner, und die Bosse halten mehr aus.</p>
+  </section>
+  <section class="pane" id="p-host">
+   <h2>Koop &amp; Deathmatch</h2>
+   <p class="lead">Alle 5 Wellen kommt ein Boss: Lil M, Drachenlord, SehrJamal, Jermaine, Raphael, Jxhn2K, Slimee Rebel.</p>
+   <h3>Raum-Code für Mitspieler</h3><div class="code" id="hc">...</div>
+   <p id="pl" class="hint"></p>
+   <div class="grid3">
+    <label>Karte<select id="mp"><option value="0">Arena</option><option value="1">Ringlabyrinth</option><option value="2">Pfeilerhalle (Hölle)</option><option value="3">Bunker</option><option value="4">Kathedrale</option><option value="5">Schlangenweg</option><option value="6">Präsidentenstraße</option><option value="7">Ultimative Kampf Arena Bonn</option></select></label>
+    <label>Schwierigkeit<select id="df"><option value="0">Leicht</option><option value="1" selected>Normal</option><option value="2">Hart</option></select></label>
+    <label>Modus<select id="gm"><option value="0">Koop</option><option value="1">Deathmatch (ab 2)</option></select></label></div>
+   <div class="row"><button class="pri big" onclick="startGame()">Spiel starten</button></div>
+   <details><summary>Ohne Internet verbinden (manuelle Codes)</summary><div><button onclick="invite()">Mitspieler einladen</button>
+    <p>1. Diesen Code an den Mitspieler schicken:</p><textarea id="oc" readonly></textarea>
+    <p>2. Antwort-Code des Mitspielers hier einfügen:</p><textarea id="ia"></textarea>
+    <button onclick="accept()">Verbinden</button></div></details>
+  </section>
+  <section class="pane" id="p-join">
+   <h2>Beitreten</h2>
+   <h3>Raum-Code vom Host</h3>
+   <div class="row joinrow"><input id="jc" maxlength="12" placeholder="ABCD"><button class="pri" onclick="joinCode()">Verbinden</button></div><p id="js2" class="hint"></p>
+   <h3>Dein Charakter im Story-Modus</h3><div class="chars" id="cg2"></div>
+   <details><summary>Ohne Internet verbinden (manuelle Codes)</summary><div><p>1. Code vom Host einfügen:</p><textarea id="ic"></textarea>
+    <button onclick="join()">Antwort-Code erzeugen</button>
+    <p>2. Diesen Antwort-Code an den Host schicken:</p><textarea id="oc2" readonly></textarea>
+    <p id="js">Danach warten, das Spiel startet automatisch.</p></div></details>
+  </section>
+  <section class="pane" id="p-guns">
+   <h2>Waffen <span id="lc"></span></h2>
+   <p class="lead">Wähle bis zu 5 Waffen für Koop und Deathmatch. Die Faust ist immer dabei, Munition gibt es nur für gewählte Waffen.</p>
+   <div id="lg"></div>
+   <p class="hint">Im Story-Modus startest du mit der Pistole und bekommst neue Waffen per Case Opening.</p>
+  </section>
+  <section class="pane" id="p-opts">
+   <h2>Ton &amp; Steuerung</h2>
+   <h3>Effekte</h3><input type="range" id="sv" min="0" max="100" value="70">
+   <h3>Musik</h3><input type="range" id="mv" min="0" max="100" value="15">
+   <p class="hint">Im Story-Modus hat jedes Level seinen eigenen Song. Für Koop kannst du hier eine eigene Datei wählen:</p><input type="file" id="mf" accept="audio/*">
+   <h3>Tastatur und Maus</h3>
+   <p><kbd>WASD</kbd> laufen, Maus zielen und hoch/runter schauen, Klick schießen, <kbd>Leertaste</kbd> springen, <kbd>Shift</kbd> rennen, <kbd>1</kbd>–<kbd>9</kbd> oder Mausrad Waffe wechseln, <kbd>M</kbd> Minimap, <kbd>N</kbd> Ton aus, <kbd>P</kbd> Pause, <kbd>Enter</kbd> Dialoge weiter.</p>
+   <h3>Controller</h3>
+   <p>Linker Stick laufen, rechter Stick zielen, <kbd>RT</kbd> schießen, <kbd>A</kbd> springen und Dialoge weiter, <kbd>LT</kbd> rennen, <kbd>RB</kbd>/<kbd>LB</kbd> Waffe wechseln, <kbd>Y</kbd> Minimap, <kbd>Start</kbd> Pause. Im Menü: Steuerkreuz auf/ab, <kbd>A</kbd> auswählen, <kbd>B</kbd> zurück.</p>
+   <p class="hint">Wer springt, weicht Geschossen am Boden aus. Bomben treffen trotzdem.</p>
+  </section>
+ </div>
+</div>
+<script src="js/peerjs.min.js"></script>
+<script src="js/game.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/story.js"></script>
+<script src="js/menu.js"></script>
+<script>boot()</script>
+</body></html>

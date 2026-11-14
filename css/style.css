@@ -1,0 +1,71 @@
+/* HELLFIRE LAN - Menue. Hinter dem Menue laeuft das Spiel als Vorschau, deshalb ist alles halbtransparent. */
+:root{--soot:#0a0708;--ember:#ff5a1f;--gold:#ffd23f;--ash:#e3dad1;--dim:#9a8f86;--line:#3a2d27;--blood:#b3121a;
+ --mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono","Liberation Mono",monospace}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;color:var(--ash);font:14px/1.5 var(--mono);overflow:hidden}
+#cv{width:100vw;height:100vh;display:block;object-fit:contain;image-rendering:pixelated;background:#000}
+
+#m{position:fixed;inset:0;display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);gap:0;overflow:auto;
+ background:linear-gradient(90deg,rgba(10,7,8,.94) 0,rgba(10,7,8,.82) 28%,rgba(10,7,8,.25) 62%,rgba(10,7,8,.05) 100%)}
+.side{padding:clamp(18px,4vh,44px) 0 24px clamp(18px,3vw,48px);display:flex;flex-direction:column;min-height:100%}
+#logo{width:min(340px,100%);height:auto;image-rendering:pixelated;display:block}
+.tag{margin:10px 0 clamp(14px,4vh,40px);color:var(--dim);font-size:12.5px;max-width:34ch}
+
+/* Hauptmenue: grosse Textzeilen, links eine Flammenleiste, die beim Auswaehlen waechst */
+#nav{display:flex;flex-direction:column;gap:2px}
+#nav button{all:unset;cursor:pointer;display:block;padding:9px 14px 9px 18px;position:relative;transition:transform .16s cubic-bezier(.2,.9,.3,1.4),background .16s}
+#nav button::before{content:"";position:absolute;left:0;top:10%;bottom:10%;width:4px;background:linear-gradient(var(--gold),var(--ember),var(--blood));transform:scaleY(.15);transform-origin:50% 100%;opacity:.5;transition:transform .2s,opacity .2s}
+#nav b{display:block;font:800 22px/1.15 var(--mono);letter-spacing:.5px;color:var(--ash);transition:color .15s}
+#nav i{display:block;font-style:normal;font-size:11.5px;color:var(--dim);margin-top:1px}
+#nav button:hover,#nav button:focus-visible{transform:translateX(8px)}
+#nav button:hover::before,#nav button:focus-visible::before{transform:scaleY(.7);opacity:1}
+#nav button:hover b,#nav button:focus-visible b{color:var(--gold)}
+#nav button.on{transform:translateX(12px);background:linear-gradient(90deg,rgba(255,90,31,.2),transparent 85%)}
+#nav button.on::before{transform:scaleY(1);opacity:1;animation:flick .5s steps(3) infinite}
+#nav button.on b{color:var(--ember)}
+@keyframes flick{50%{filter:brightness(1.5)}}
+.name{margin-top:auto;padding-top:22px;font-size:11.5px;color:var(--dim);display:block;max-width:230px}
+.name input{margin-top:4px}
+
+/* Rechte Seite: ein Feld pro Menuepunkt, schiebt sich beim Oeffnen herein */
+.stage{display:flex;align-items:flex-start;justify-content:flex-start;padding:clamp(18px,4vh,44px) clamp(14px,3vw,40px)}
+.pane{display:none;width:min(540px,100%);background:rgba(12,9,9,.9);border-left:4px solid var(--ember);padding:20px 24px 20px;
+ clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%);backdrop-filter:blur(5px);max-height:calc(100vh - 36px);overflow:auto}
+.pane.on{display:block;animation:slide .22s cubic-bezier(.2,.8,.2,1)}
+@keyframes slide{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+#p-story{border-image:linear-gradient(#7b2ff7,#f1076b,#ffb13d) 1;border-left-width:4px}
+h2{margin:0 0 6px;font:800 24px/1.1 var(--mono);color:#fff}
+h2 span{font-size:14px;color:var(--gold)}
+h3{margin:16px 0 6px;font:700 12.5px var(--mono);color:var(--gold)}
+p{margin:6px 0}.lead{color:var(--ash);font-size:13px;max-width:60ch}.hint{color:var(--dim);font-size:12px;max-width:66ch}
+input,select,textarea{width:100%;background:#120d0c;color:var(--ash);border:1px solid var(--line);border-radius:0;padding:9px 10px;font:inherit;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+input[type=range]{padding:0;accent-color:var(--ember);border:0;background:none}input[type=file]{font-size:12px;color:var(--dim)}
+textarea{height:60px;font:11px var(--mono);color:#9f9;resize:none}
+.pane button{background:#211816;color:var(--ash);border:1px solid var(--line);padding:9px 14px;font:700 13px var(--mono);cursor:pointer;transition:background .12s,color .12s,transform .08s;margin-top:6px}
+.pane button:hover,.pane button:focus-visible{background:#33221c;border-color:var(--ember)}
+.pane button:active{transform:translateY(1px)}
+.pane button.pri{background:var(--ember);border-color:var(--ember);color:#160a05;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
+.pane button.pri:hover,.pane button.pri:focus-visible{background:var(--gold);border-color:var(--gold)}
+.pane button.big{padding:14px;font-size:15px;flex:1}
+button:disabled{opacity:.4;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.row{display:flex;gap:10px;margin-top:12px}.row button{margin-top:0}
+.joinrow input{font:800 24px var(--mono);letter-spacing:6px;text-transform:uppercase;text-align:center}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.grid3 label{font-size:11.5px;color:var(--dim)}.grid3 select{margin-top:3px;padding:8px 6px}
+.code{font:800 40px/1 var(--mono);letter-spacing:10px;color:var(--gold);text-align:center;background:#120d0c;border:1px dashed #5a463c;padding:12px 0;text-shadow:0 0 18px rgba(255,210,63,.35)}
+details{margin-top:12px;color:var(--dim);font-size:12px}summary{cursor:pointer;padding:4px 0}summary:hover{color:var(--ash)}
+kbd{background:#211816;border:1px solid var(--line);padding:0 5px;font:11px var(--mono);color:var(--ash)}
+#lg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+#lg label{display:block;padding:8px 10px;background:#120d0c;border:1px solid var(--line);cursor:pointer;transition:border-color .12s,background .12s;user-select:none}
+#lg label:hover{border-color:var(--ember)}#lg label.on{border-color:var(--gold);background:#2b2110}
+#lg input{display:none}#lg b{display:block;font-size:12px}#lg i{display:block;font-style:normal;font-size:11px;color:var(--dim)}
+.chars{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.pane .ch{padding:6px 2px 5px;display:flex;flex-direction:column;align-items:center;gap:4px;background:#120d0c;margin:0}
+.ch img{height:78px;image-rendering:pixelated;transition:transform .15s}
+.ch:hover img{transform:translateY(-3px) scale(1.05)}
+.ch span{font-size:10px;font-weight:700;color:var(--dim)}
+.pane .ch.on{border-color:var(--gold);background:#2b2110}.ch.on span{color:var(--gold)}.ch.on img{animation:hop .5s ease}
+@keyframes hop{40%{transform:translateY(-8px)}}
+@media(max-width:820px){#m{grid-template-columns:1fr;background:rgba(10,7,8,.86)}.side{padding-right:18px;min-height:0}.stage{padding-top:0}.chars{grid-template-columns:repeat(3,1fr)}.name{margin-top:18px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
